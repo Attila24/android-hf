@@ -1,7 +1,7 @@
 package hf.thewalkinglife;
 
-import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -24,34 +24,26 @@ public class FirstRunDialogFragment extends DialogFragment {
 
     @BindView(R.id.firstRunName) EditText firstRunName;
     @BindView(R.id.firstRunDailyGoal) EditText firstRunDailyGoal;
+    @BindView(R.id.firstRunStride) EditText firstRunStride;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (getTargetFragment() != null) {
-            try {
-                listener = (FirstRunFinishedListener) getTargetFragment();
-            } catch (ClassCastException ce) {
-                Log.e(TAG, "Target Fragment does not implement fragment interface!");
-            } catch (Exception e) {
-                Log.e(TAG, "Unhandled exception!");
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                listener = (FirstRunFinishedListener) activity;
-            } catch (ClassCastException ce) {
-                Log.e(TAG, "Parent Activity does not implement fragment interface!");
-            } catch (Exception e) {
-                Log.e(TAG, "Unhandled exception!");
-                e.printStackTrace();
-            }
-        }    }
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            listener = (FirstRunFinishedListener) getTargetFragment();
+        } catch (ClassCastException ce) {
+            Log.e(TAG, "Parent Fragment does not implement interface!");
+        } catch (Exception e) {
+            Log.e(TAG, "Unhandled exception!");
+            e.printStackTrace();
+        }
+    }
 
     @OnClick(R.id.saveButton)
     public void save() {
         String username = firstRunName.getText().toString();
-        String dailyGoal = firstRunName.getText().toString();
+        String dailyGoal = firstRunDailyGoal.getText().toString();
+        String stride = firstRunStride.getText().toString();
 
         boolean valid = true;
 
@@ -63,12 +55,19 @@ public class FirstRunDialogFragment extends DialogFragment {
             firstRunDailyGoal.setError("Daily goal is required!");
             valid = false;
         }
+        if (TextUtils.isEmpty(stride)) {
+            firstRunStride.setError("Stride is required!");
+            valid = false;
+        }
 
         if (valid) {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
             SharedPreferences.Editor editor = preferences.edit();
-            editor.putString(PreferenceConstants.USER_NAME, firstRunName.getText().toString());
-            editor.putString(PreferenceConstants.DAILY_GOAL, firstRunDailyGoal.getText().toString());
+            editor.putString(PreferenceConstants.USER_NAME, username);
+            editor.putString(PreferenceConstants.DAILY_GOAL, dailyGoal);
+            editor.putString(PreferenceConstants.STRIDE, stride);
+            editor.putBoolean(PreferenceConstants.STEPS_ENABLED, PreferenceConstants.STEPS_ENABLED_DEFAULT);
+            editor.putBoolean(PreferenceConstants.NOTIFICATIONS_ENABLED, PreferenceConstants.NOTIFICATIONS_ENABLED_DEFAULT);
             editor.apply();
 
             if (listener != null) {

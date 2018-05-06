@@ -3,6 +3,8 @@
     package="hf.thewalkinglife">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:name=".StepsApplication"
         android:allowBackup="true"
@@ -10,22 +12,20 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:configChanges="orientation|screenSize"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".SettingsActivity">
-            <intent-filter>
-                <action android:name=".Preferences" />
-                <category android:name="android.intent.category.PREFERENCE" />
-            </intent-filter>
-        </activity>
-
         <service android:name=".service.StepService" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
     </application>
+
 </manifest>

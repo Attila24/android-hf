@@ -19,5 +19,14 @@
     <string name="action_home">Home</string>
     <string name="action_map">Map</string>
     <string name="action_history">History</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="gps_disabled">GPS Disabled!</string>
+    <string name="gps_disabled_dialog_message">Turn on GPS to use the location service.</string>
+    <string name="stride">Stride</string>
+    <string name="default_stride">0.7874</string>
+    <string name="notif_finish_title">Daily goal reached!</string>
+    <string name="notif_finish_text">Congratulations! You have reached your daily goal.</string>
+    <string name="channel_name">The Walking Life</string>
+    <string name="notif_step_service_running">Step counter service running</string>
 
 </resources>

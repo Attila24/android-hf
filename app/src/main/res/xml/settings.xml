@@ -13,6 +13,12 @@
             android:inputType="number"
             android:title="@string/daily_goal"/>
 
+        <EditTextPreference
+            android:id="@+id/preferences_stride"
+            android:key="stride"
+            android:inputType="numberDecimal"
+            android:title="@string/stride"/>
+
         <SwitchPreference
             android:id="@+id/preferences_enable_steps"
             android:key="enable_steps"

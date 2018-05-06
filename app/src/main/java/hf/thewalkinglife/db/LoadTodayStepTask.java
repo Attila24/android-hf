@@ -9,9 +9,9 @@ import hf.thewalkinglife.model.StepData;
 public class LoadTodayStepTask extends AsyncTask<Void, Void, Cursor> {
     private static final String TAG = "LoadTodayStepTask";
     private StepDataDbManager dbManager;
-    private StepsFragment fragment;
+    private TodayStepLoaderFragment fragment;
 
-    public LoadTodayStepTask(StepsFragment fragment, StepDataDbManager dbManager) {
+    public LoadTodayStepTask(TodayStepLoaderFragment fragment, StepDataDbManager dbManager) {
         this.fragment = fragment;
         this.dbManager = dbManager;
     }
@@ -41,13 +41,19 @@ public class LoadTodayStepTask extends AsyncTask<Void, Void, Cursor> {
             if (fragment != null) {
                 if (cursor != null && cursor.moveToFirst()) {
                     StepData stepData = StepDataDbManager.cursorToStepData(cursor);
-                    fragment.setStepCountText(String.valueOf(stepData.stepCount));
+                    fragment.setStepCount(String.valueOf(stepData.stepCount));
+                    cursor.close();
                 } else {
-                    fragment.setStepCountText("0");
+                    fragment.setStepCount("0");
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    public interface TodayStepLoaderFragment {
+        public void setStepCount(String stepCount);
+    }
+
 }

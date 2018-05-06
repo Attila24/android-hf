@@ -4,56 +4,45 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.widget.Toast;
-
-import java.util.List;
 
 import hf.thewalkinglife.service.StepService;
 
-public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
-    public static final String EXTRA_NO_HEADERS = ":android:no_headers";
-    public static final String EXTRA_SHOW_FRAGMENT = ":android:show_fragment";
+public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PreferenceManager.getDefaultSharedPreferences(
-                this).registerOnSharedPreferenceChangeListener(this);
+        addPreferencesFromResource(R.xml.settings);
+        PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
     }
 
     @Override
-    protected void onStop() {
-        PreferenceManager.getDefaultSharedPreferences(
-                this).unregisterOnSharedPreferenceChangeListener(this);
-
+    public void onStop() {
+        PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
         super.onStop();
-    }
-
-    @Override
-    protected boolean isValidFragment(String fragmentName) {
-        return true;
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         switch (key) {
-            case PreferenceConstants.ENABLE_NOTIFICATIONS: {
+            case PreferenceConstants.NOTIFICATIONS_ENABLED: {
                 break;
             }
-            case PreferenceConstants.ENABLE_STEPS: {
+            case PreferenceConstants.STEPS_ENABLED: {
                 startServiceWhenEnabled(
-                        PreferenceConstants.ENABLE_STEPS,
+                        PreferenceConstants.STEPS_ENABLED,
                         sharedPreferences,
-                        getApplicationContext(), StepService.class);
+                        getActivity(), StepService.class);
                 break;
             }
             case PreferenceConstants.DAILY_GOAL: {
@@ -62,7 +51,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 try {
                     Integer intValue = Integer.parseInt(value, 10);
                 } catch (NumberFormatException e) {
-                    Toast.makeText(getApplicationContext(), "Entered daily goal value is too high or incorrect format!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Entered daily goal value is too high or incorrect format!", Toast.LENGTH_SHORT).show();
                     editor.putString(PreferenceConstants.DAILY_GOAL, PreferenceConstants.DEFAULT_DAILY_GOAL);
                     editor.apply();
                 }
@@ -84,18 +73,4 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
            context.stopService(intent);
        }
     }
-
-    @Override
-    public void onBuildHeaders(List<Header> target) {
-        loadHeadersFromResource(R.xml.fragmentsettings, target);
-    }
-
-    public static class FragmentSettingsBasic extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.settings);
-        }
-    }
-
 }

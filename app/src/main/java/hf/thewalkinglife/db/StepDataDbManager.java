@@ -35,6 +35,15 @@ public class StepDataDbManager {
         return fetchStepData(getTodayDate());
     }
 
+    public Cursor fetchAllStepData() {
+        return db.query(DatabaseConstants.StepData.DATABASE_TABLE,
+                new String[] {
+                    DatabaseConstants.StepData.KEY_ROWID,
+                        DatabaseConstants.StepData.KEY_STEPS_COUNT,
+                        DatabaseConstants.StepData.KEY_DATE
+                }, null, null, null, null, null);
+    }
+
     public Cursor fetchStepData(String date) {
         return db.query(DatabaseConstants.StepData.DATABASE_TABLE,
                 new String[]{
@@ -54,7 +63,7 @@ public class StepDataDbManager {
         }
     }
 
-    static StepData cursorToStepData(Cursor c) {
+    public static StepData cursorToStepData(Cursor c) {
         return new StepData(
                 c.getString(c.getColumnIndex(DatabaseConstants.StepData.KEY_DATE)),
                 c.getInt(c.getColumnIndex(DatabaseConstants.StepData.KEY_STEPS_COUNT)));

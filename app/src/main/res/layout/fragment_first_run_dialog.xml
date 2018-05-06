@@ -17,9 +17,9 @@
         android:id="@+id/firstRunName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/preferences_name"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="@string/preferences_name"/>
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/firstRunDailyGoal"
@@ -27,9 +27,17 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/daily_goal"
         android:ems="10"
+        android:inputType="numberDecimal"
+        android:text="@string/default_daily_goal" />
+
+    <EditText
+        android:id="@+id/firstRunStride"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/stride"
+        android:ems="10"
         android:inputType="number"
-        android:text="@string/default_daily_goal"
-        android:hint="@string/daily_goal"/>
+        android:text="@string/default_stride" />
 
     <Button
         android:id="@+id/saveButton"

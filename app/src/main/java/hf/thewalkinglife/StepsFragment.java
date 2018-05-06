@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,14 +22,12 @@ import hf.thewalkinglife.db.LoadTodayStepTask;
 import hf.thewalkinglife.db.StepDataDbManager;
 import hf.thewalkinglife.service.StepService;
 
-public class StepsFragment extends Fragment {
+public class StepsFragment extends Fragment implements LoadTodayStepTask.TodayStepLoaderFragment {
     private static final String TAG = "StepsFragment";
 
     private LoadTodayStepTask loadTodayStepTask;
     private StepDataDbManager dbManager;
     private SharedPreferences sharedPreferences;
-
-    private String dailyGoal;
 
     @BindView(R.id.steps_progress) CircleProgressView stepsProgress;
     @BindView(R.id.steps_daily_goal) TextView dailyGoalText;
@@ -64,8 +61,8 @@ public class StepsFragment extends Fragment {
         }
     }
 
-    private void refreshDailyGoal() {
-        dailyGoal = sharedPreferences.getString(PreferenceConstants.DAILY_GOAL, PreferenceConstants.DEFAULT_DAILY_GOAL);
+    public void refreshDailyGoal() {
+        String dailyGoal = sharedPreferences.getString(PreferenceConstants.DAILY_GOAL, PreferenceConstants.DEFAULT_DAILY_GOAL);
         stepsProgress.setMaxValue(Float.valueOf(dailyGoal));
         dailyGoalText.setText(String.format("Your daily goal: %s", dailyGoal));
     }
@@ -82,15 +79,13 @@ public class StepsFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             int steps = intent.getIntExtra(StepService.KEY_STEP_COUNT, 0);
-            Log.d(TAG, "Received new steps count = " + String.valueOf(steps));
-            setStepCountText(String.valueOf(steps));
+            setStepCount(String.valueOf(steps));
         }
     };
 
-    public void setStepCountText(String steps) {
-        Log.d(TAG, "setting step count text = " + steps);
-
-        float value = steps != null ? Float.parseFloat(steps) : 0f;
+    @Override
+    public void setStepCount(String stepCount) {
+        float value = stepCount != null ? Float.parseFloat(stepCount) : 0f;
         stepsProgress.setValue(value);
     }
 }
