@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    
+    
+    <at.grabner.circleprogress.CircleProgressView
+        android:id="@+id/steps_progress"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        app:cpv_textMode="Value"
+        app:cpv_rimWidth="30dp"
+        app:cpv_barWidth="30dp"
+        app:cpv_rimColor="#ffffff"
+        app:cpv_barColor1="#C9DE96"
+        app:cpv_barColor2="#8ab66b"
+        app:cpv_barColor3="#398235"
+        app:cpv_barColor="#006e2e"
+        app:cpv_autoTextSize="true"/>
+
+    <TextView
+        android:id="@+id/steps_daily_goal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/steps_progress" />
+</android.support.constraint.ConstraintLayout>

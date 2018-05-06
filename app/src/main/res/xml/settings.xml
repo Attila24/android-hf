@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/title_settings">
+
+        <EditTextPreference
+            android:id="@+id/preferences_user_name"
+            android:key="user_name"
+            android:title="@string/preferences_name"/>
+
+        <EditTextPreference
+            android:id="@+id/preferences_daily_goal"
+            android:key="daily_goal"
+            android:inputType="number"
+            android:title="@string/daily_goal"/>
+
+        <SwitchPreference
+            android:id="@+id/preferences_enable_steps"
+            android:key="enable_steps"
+            android:summaryOff="@string/label_off"
+            android:summaryOn="@string/label_on"
+            android:title="Step counting"/>
+
+        <SwitchPreference
+            android:id="@+id/preferences_enable_notifications"
+            android:key="enable_notifications"
+            android:summaryOff="@string/label_off"
+            android:summaryOn="@string/label_on"
+            android:title="@string/preferences_enable_notifications"/>
+
+    </PreferenceCategory>
+</PreferenceScreen>

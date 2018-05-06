@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/first_run_dialog_intro"
+        android:textAlignment="center"/>
+
+    <EditText
+        android:id="@+id/firstRunName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/preferences_name"/>
+
+    <EditText
+        android:id="@+id/firstRunDailyGoal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/daily_goal"
+        android:ems="10"
+        android:inputType="number"
+        android:text="@string/default_daily_goal"
+        android:hint="@string/daily_goal"/>
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/first_run_dialog_save" />
+
+</LinearLayout>
