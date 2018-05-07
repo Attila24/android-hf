@@ -22,6 +22,9 @@ import hf.thewalkinglife.db.LoadTodayStepTask;
 import hf.thewalkinglife.db.StepDataDbManager;
 import hf.thewalkinglife.service.StepService;
 
+/**
+ * The fragment showing the current step count in a pregress circle and displaying the user's daily goal.
+ */
 public class StepsFragment extends Fragment implements LoadTodayStepTask.TodayStepLoaderFragment {
     private static final String TAG = "StepsFragment";
 
@@ -31,7 +34,6 @@ public class StepsFragment extends Fragment implements LoadTodayStepTask.TodaySt
 
     @BindView(R.id.steps_progress) CircleProgressView stepsProgress;
     @BindView(R.id.steps_daily_goal) TextView dailyGoalText;
-
 
     @Nullable
     @Override
@@ -43,6 +45,9 @@ public class StepsFragment extends Fragment implements LoadTodayStepTask.TodaySt
         return view;
     }
 
+    /**
+     * Registers to the StepService's broadcast events to react whenever a new step has occured.
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -51,6 +56,10 @@ public class StepsFragment extends Fragment implements LoadTodayStepTask.TodaySt
         refreshDailyGoal();
     }
 
+    /**
+     * Unregisters from the StepService.
+     * If there was an async task still running, stops it.
+     */
     @Override
     public void onPause() {
         super.onPause();
@@ -67,6 +76,9 @@ public class StepsFragment extends Fragment implements LoadTodayStepTask.TodaySt
         dailyGoalText.setText(String.format("Your daily goal: %s", dailyGoal));
     }
 
+    /**
+     * Starts a new async task that will load today's step data.
+     */
     private void refreshStepCount() {
         if (loadTodayStepTask != null) {
             loadTodayStepTask.cancel(false);
@@ -75,6 +87,9 @@ public class StepsFragment extends Fragment implements LoadTodayStepTask.TodaySt
         loadTodayStepTask.execute();
     }
 
+    /**
+     * Receives events from the StepService.
+     */
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -83,6 +98,10 @@ public class StepsFragment extends Fragment implements LoadTodayStepTask.TodaySt
         }
     };
 
+    /**
+     * Runs whenever the current step count has changed.
+     * The circle progressbar requires the value to be float.
+     */
     @Override
     public void setStepCount(String stepCount) {
         float value = stepCount != null ? Float.parseFloat(stepCount) : 0f;

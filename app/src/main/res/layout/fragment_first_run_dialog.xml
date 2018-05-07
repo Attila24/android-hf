@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome"
+        android:textSize="24sp"
+        android:textAlignment="center"/>
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
@@ -13,31 +19,61 @@
         android:text="@string/first_run_dialog_intro"
         android:textAlignment="center"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:text="@string/preferences_name"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     <EditText
         android:id="@+id/firstRunName"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/preferences_name"
+        android:hint="@string/preferences_name"
         android:ems="10"
         android:inputType="textPersonName" />
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:text="@string/daily_goal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     <EditText
         android:id="@+id/firstRunDailyGoal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/daily_goal"
         android:ems="10"
+        android:hint="@string/daily_goal"
         android:inputType="numberDecimal"
         android:text="@string/default_daily_goal" />
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:text="@string/stride"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     <EditText
         android:id="@+id/firstRunStride"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/stride"
         android:ems="10"
+        android:hint="@string/stride"
         android:inputType="number"
         android:text="@string/default_stride" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/saveButton"

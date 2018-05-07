@@ -8,6 +8,9 @@ import android.graphics.Paint;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
+/**
+ * A helper class that can create a text bitmap that will be displayed on the map.
+ */
 public class MapTextIconFactory {
     public static BitmapDescriptor createPureTextIcon(String text) {
         Paint textPaint = new Paint();

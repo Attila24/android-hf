@@ -3,8 +3,12 @@ package hf.thewalkinglife.db;
 import android.database.Cursor;
 import android.os.AsyncTask;
 
+/**
+ * An async task for loading all of the step data saved in the database.
+ */
 public class LoadStepsTask extends AsyncTask<Void, Void, Cursor> {
     private static final String TAG = "LoadStepsTask";
+
     private StepDataDbManager dbManager;
     private StepsLoaderFragment fragment;
 
@@ -16,6 +20,7 @@ public class LoadStepsTask extends AsyncTask<Void, Void, Cursor> {
     @Override
     protected Cursor doInBackground(Void... voids) {
         try {
+            // Fetch all step data and save it in a Cursor
             Cursor cursor = dbManager.fetchAllStepData();
             if (!isCancelled()) {
                 return cursor;
@@ -36,6 +41,7 @@ public class LoadStepsTask extends AsyncTask<Void, Void, Cursor> {
         super.onPostExecute(cursor);
         try {
             if (fragment != null) {
+                // Return the result cursor to the originating fragment.
                 fragment.setSteps(cursor);
             }
         } catch (Exception e) {
@@ -43,7 +49,10 @@ public class LoadStepsTask extends AsyncTask<Void, Void, Cursor> {
         }
     }
 
+    /**
+     * The interface that the fragment needs to implement to use this loader task.
+     */
     public interface StepsLoaderFragment {
-        public void setSteps(Cursor steps);
+        void setSteps(Cursor steps);
     }
 }

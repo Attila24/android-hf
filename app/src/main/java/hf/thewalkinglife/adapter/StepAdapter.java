@@ -15,6 +15,9 @@ import hf.thewalkinglife.R;
 import hf.thewalkinglife.db.StepDataDbManager;
 import hf.thewalkinglife.model.StepData;
 
+/**
+ * Adapter for bridging step data between a cursor and the RecyclerView in the HistoryFragment.
+ */
 public class StepAdapter extends CursorRecyclerViewAdapter<StepAdapter.ViewHolder> {
     private static final String TAG = "StepAdapter";
 
@@ -22,12 +25,15 @@ public class StepAdapter extends CursorRecyclerViewAdapter<StepAdapter.ViewHolde
         super(context, cursor);
     }
 
+    /**
+     * Binds a given stepdata's values to the viewholder.
+     */
     @Override
     public void onBindViewHolder(ViewHolder holder, Cursor cursor) {
         final StepData stepData = StepDataDbManager.cursorToStepData(cursor);
 
         holder.stepDataDate.setText(stepData.date);
-        holder.stepDataCount.setText(String.valueOf(stepData.stepCount));
+        holder.stepDataCount.setText(mContext.getString(R.string.stepdata_row_steps, String.valueOf(stepData.stepCount)));
     }
 
     @NonNull
@@ -37,11 +43,14 @@ public class StepAdapter extends CursorRecyclerViewAdapter<StepAdapter.ViewHolde
         return new ViewHolder(view);
     }
 
+    /**
+     * A helper class that holds the two values of a stepdata row.
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.stepdata_date) TextView stepDataDate;
         @BindView(R.id.stepdata_count) TextView stepDataCount;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }

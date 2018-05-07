@@ -28,5 +28,7 @@
     <string name="notif_finish_text">Congratulations! You have reached your daily goal.</string>
     <string name="channel_name">The Walking Life</string>
     <string name="notif_step_service_running">Step counter service running</string>
+    <string name="stepdata_row_steps">Steps: %1$s</string>
+    <string name="welcome">Welcome!</string>
 
 </resources>

@@ -5,8 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * A helper class that is used to run the database creation and upgrade (drop, then recreate) operations.
+ */
 public class DatabaseHelper extends SQLiteOpenHelper {
-
     private static final String TAG = "DatabaseHelper";
 
     DatabaseHelper(Context context, String name) {
@@ -15,7 +17,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.d(TAG, DatabaseConstants.DATABASE_CREATE_ALL);
         db.execSQL(DatabaseConstants.DATABASE_CREATE_ALL);
     }
 

@@ -13,6 +13,10 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * The entry point screen of the application.
+ * Holds the "Hello" text and the step counting sub-fragment.
+ */
 public class MainFragment extends Fragment implements FirstRunDialogFragment.FirstRunFinishedListener {
     private static final String TAG = "MainFragment";
 
@@ -34,6 +38,9 @@ public class MainFragment extends Fragment implements FirstRunDialogFragment.Fir
         return view;
     }
 
+    /**
+     * Opens the first run dialog, if the user has opened the application for the first time.
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -47,6 +54,9 @@ public class MainFragment extends Fragment implements FirstRunDialogFragment.Fir
         }
     }
 
+    /**
+     * After the first run dialog has been closed, saves the settings and refreshes the view of the steps sub-fragment.
+     */
     @Override
     public void onFirstRunFinished() {
         SharedPreferences.Editor editor = sharedPreferences.edit();

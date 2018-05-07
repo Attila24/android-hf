@@ -17,7 +17,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import hf.thewalkinglife.MainActivity;
 import hf.thewalkinglife.PreferenceConstants;
@@ -25,6 +24,9 @@ import hf.thewalkinglife.R;
 import hf.thewalkinglife.StepsApplication;
 import hf.thewalkinglife.db.StepDataDbManager;
 
+/**
+ * The service used to track the user's steps.
+ */
 public class StepService extends Service implements SensorEventListener {
     private static final String TAG = "StepService";
 
@@ -35,23 +37,28 @@ public class StepService extends Service implements SensorEventListener {
     public static final String BR_NEW_STEP = "BR_NEW_STEP";
     public static final String KEY_STEP_COUNT = "KEY_STEP_COUNT";
 
-    private SensorManager sensorManager;
-    private Sensor sensor;
     private StepDataDbManager stepDataDbManager;
     private SharedPreferences sharedPreferences;
 
+    /**
+     * Receives the step sensor of the system, and if it's available, registers on it.
+     */
     @Override
     public void onCreate() {
         super.onCreate();
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null && sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR) != null) {
-            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+            Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
             stepDataDbManager = StepsApplication.getDbManager();
         }
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
     }
 
+    /**
+     * After the service has been started, it creates its own notification channel.
+     * If the notifications are enabled, it also creates a new notification indicating that the service is currently running.
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -66,7 +73,7 @@ public class StepService extends Service implements SensorEventListener {
 
         if (isNotificationsEnabled()) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), NOTIF_CHANNEL_ID)
-                    .setSmallIcon(R.drawable.ic_notifications_black_24dp)
+                    .setSmallIcon(R.drawable.twl_icon)
                     .setContentTitle(getString(R.string.app_name))
                     .setContentText(getString(R.string.notif_step_service_running))
                     .setContentIntent(getContentIntent())
@@ -85,6 +92,10 @@ public class StepService extends Service implements SensorEventListener {
         return null;
     }
 
+    /**
+     * Runs when the sensor has detected a new step.
+     * Saves or updates the data in the database, then notifies the application that a new step event has occured.
+     */
     @Override
     public void onSensorChanged(SensorEvent event) {
         int newStepCount = stepDataDbManager.createStepData();
@@ -101,6 +112,9 @@ public class StepService extends Service implements SensorEventListener {
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) { }
 
+    /**
+     * If the user has met the daily goal, sends a new notification.
+     */
     private void makeNotification(int stepCount) {
         String dailyGoalStr = sharedPreferences.getString(PreferenceConstants.DAILY_GOAL, PreferenceConstants.DEFAULT_DAILY_GOAL);
         int dailyGoal = Integer.parseInt(dailyGoalStr);
@@ -125,6 +139,9 @@ public class StepService extends Service implements SensorEventListener {
         return sharedPreferences.getBoolean(PreferenceConstants.NOTIFICATIONS_ENABLED, PreferenceConstants.NOTIFICATIONS_ENABLED_DEFAULT);
     }
 
+    /**
+     * Creates a new PendingIntent that will navigate the user to the application after he/she has clicked on the app's notification.
+     */
     private PendingIntent getContentIntent() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

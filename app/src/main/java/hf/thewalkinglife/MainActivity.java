@@ -2,16 +2,12 @@ package hf.thewalkinglife;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -23,6 +19,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import hf.thewalkinglife.service.StepService;
 
+/**
+ * The entry point of the application.
+ * Manages a DrawerLayout which swaps between the different screens (each of them are Fragments).
+ */
 public class MainActivity extends AppCompatActivity  {
     private static final String TAG = "MainActivity";
     private static final String KEY_STEP_SERVICE_RUNNING = "STEP_SERVICE_RUNNING";
@@ -49,9 +49,11 @@ public class MainActivity extends AppCompatActivity  {
             MenuItem item = navigationView.getMenu().getItem(0);
             onNavigationChanged(item);
 
+            // Check if the step service is enabled or is this creation not right after the first run of the application.
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             boolean stepCountingEnabled = preferences.getBoolean(PreferenceConstants.STEPS_ENABLED, PreferenceConstants.STEPS_ENABLED_DEFAULT);
-            if (stepCountingEnabled) {
+            boolean isItFirstRun = preferences.getBoolean(PreferenceConstants.FIRST_RUN, true);
+            if (stepCountingEnabled && !isItFirstRun) {
                 startStepService();
             }
         }
@@ -70,19 +72,24 @@ public class MainActivity extends AppCompatActivity  {
         stepServiceRunning = true;
     }
 
+    /**
+     * Saves the fact that the activity was already started once, so it does not need to restart the service when the orientation has changed.
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(KEY_STEP_SERVICE_RUNNING, stepServiceRunning);
         super.onSaveInstanceState(outState);
     }
 
+    /**
+     * After the user selects a new menu item from the DrawerLayout, swaps the currently loaded Fragment to the selected one.
+     */
     public boolean onNavigationChanged(@NonNull MenuItem item) {
         item.setChecked(true);
         drawerLayout.closeDrawers();
 
         Fragment fragment;
         FragmentManager fragmentManager = getFragmentManager();
-
         switch (item.getItemId()) {
             case R.id.action_home:
                 fragment = new MainFragment();
@@ -104,6 +111,9 @@ public class MainActivity extends AppCompatActivity  {
         return true;
     }
 
+    /**
+     * Reacts to the user's click of the hamburger icon on the top left corner.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

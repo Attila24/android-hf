@@ -17,6 +17,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * A dialog window that shows up on when the user has opened the application for the first time.
+ */
 public class FirstRunDialogFragment extends DialogFragment {
 
     private static final String TAG = "FirstRunDialogFragment";
@@ -26,6 +29,9 @@ public class FirstRunDialogFragment extends DialogFragment {
     @BindView(R.id.firstRunDailyGoal) EditText firstRunDailyGoal;
     @BindView(R.id.firstRunStride) EditText firstRunStride;
 
+    /**
+     * After its creation, the dialog acquires a reference to the fragment that started it, and which listens to the event of closing the dialog.
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -39,6 +45,11 @@ public class FirstRunDialogFragment extends DialogFragment {
         }
     }
 
+    /**
+     * Runs after the user has clicked the save button.
+     * Validates the input text boxes, and if everything is valid, then saves his/her data to the app's shared preferences.
+     * Finally, notifies the listener fragment.
+     */
     @OnClick(R.id.saveButton)
     public void save() {
         String username = firstRunName.getText().toString();
@@ -69,11 +80,9 @@ public class FirstRunDialogFragment extends DialogFragment {
             editor.putBoolean(PreferenceConstants.STEPS_ENABLED, PreferenceConstants.STEPS_ENABLED_DEFAULT);
             editor.putBoolean(PreferenceConstants.NOTIFICATIONS_ENABLED, PreferenceConstants.NOTIFICATIONS_ENABLED_DEFAULT);
             editor.apply();
-
             if (listener != null) {
                 listener.onFirstRunFinished();
             }
-
             dismiss();
         }
     }
@@ -83,13 +92,14 @@ public class FirstRunDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_first_run_dialog, container, false);
         ButterKnife.bind(this, view);
-
         getDialog().setTitle(R.string.first_run_dialog_title);
         return view;
     }
 
+    /**
+     * The interface that the fragment needs to implement which opens this dialog fragment.
+     */
     public interface FirstRunFinishedListener {
         void onFirstRunFinished();
     }
-
 }

@@ -15,6 +15,9 @@ import hf.thewalkinglife.adapter.StepAdapter;
 import hf.thewalkinglife.db.LoadStepsTask;
 import hf.thewalkinglife.db.StepDataDbManager;
 
+/**
+ * A screen which lists the user's step history in a RecyclerView.
+ */
 public class HistoryFragment extends Fragment implements LoadStepsTask.StepsLoaderFragment {
 
     @BindView(R.id.step_data_list) RecyclerView stepDataList;
@@ -59,7 +62,9 @@ public class HistoryFragment extends Fragment implements LoadStepsTask.StepsLoad
         }
     }
 
-
+    /**
+     * Starts a new async task to load all of the step data of the user.
+     */
     private void refreshList() {
         if (loadStepsTask != null) {
             loadStepsTask.cancel(false);
@@ -68,6 +73,9 @@ public class HistoryFragment extends Fragment implements LoadStepsTask.StepsLoad
         loadStepsTask.execute();
     }
 
+    /**
+     * Runs when the load task has finished. Sets the RecyclerView's adapter.
+     */
     @Override
     public void setSteps(Cursor steps) {
         adapter = new StepAdapter(getContext(), steps);

@@ -11,6 +11,9 @@ import android.widget.Toast;
 
 import hf.thewalkinglife.service.StepService;
 
+/**
+ * The screen holding the application's preferences.
+ */
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
@@ -31,13 +34,16 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         super.onStop();
     }
 
+    /**
+     * Reacts to the changes in the application's preferences.
+     * If the user has just enabled step monitoring, the starts the step service.
+     * If the user has changed a number type field (daily goal, stride), then checks the entered value's validity.
+     * Displays a toast if the value is incorrectly formatted and resets it to the default value.
+     */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         switch (key) {
-            case PreferenceConstants.NOTIFICATIONS_ENABLED: {
-                break;
-            }
             case PreferenceConstants.STEPS_ENABLED: {
                 startServiceWhenEnabled(
                         PreferenceConstants.STEPS_ENABLED,
@@ -57,12 +63,22 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 }
                 break;
             }
-            case PreferenceConstants.USER_NAME: {
+            case PreferenceConstants.STRIDE:
+                String value = sharedPreferences.getString(PreferenceConstants.STRIDE, "0.0");
+                try {
+                    Float floatValue = Float.parseFloat(value);
+                } catch (NumberFormatException e) {
+                    Toast.makeText(getActivity(), "Entered stride value is too high or incorrect format!", Toast.LENGTH_SHORT).show();
+                    editor.putString(PreferenceConstants.STRIDE, PreferenceConstants.DEFAULT_STRIDE);
+                    editor.apply();
+                }
                 break;
-            }
         }
     }
 
+    /**
+     * Starts or stops a service depending on a given preference's setting.
+     */
     static void startServiceWhenEnabled(String key, SharedPreferences sharedPreferences,
                                         Context context, Class serviceClass) {
        boolean startService = sharedPreferences.getBoolean(key, false);

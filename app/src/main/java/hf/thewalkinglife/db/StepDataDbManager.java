@@ -10,6 +10,9 @@ import java.util.Calendar;
 
 import hf.thewalkinglife.model.StepData;
 
+/**
+ * Manages the database of this application.
+ */
 public class StepDataDbManager {
 
     private static final String TAG = "StepDataDbManager";
@@ -44,7 +47,7 @@ public class StepDataDbManager {
                 }, null, null, null, null, null);
     }
 
-    public Cursor fetchStepData(String date) {
+    private Cursor fetchStepData(String date) {
         return db.query(DatabaseConstants.StepData.DATABASE_TABLE,
                 new String[]{
                     DatabaseConstants.StepData.KEY_ROWID,
@@ -54,7 +57,7 @@ public class StepDataDbManager {
                 null, null, null, null);
     }
 
-    public StepData getStepData(String date) {
+    private StepData getStepData(String date) {
         Cursor cursor = fetchStepData(date);
         if (cursor.moveToFirst()) {
             return cursorToStepData(cursor);
@@ -69,8 +72,13 @@ public class StepDataDbManager {
                 c.getInt(c.getColumnIndex(DatabaseConstants.StepData.KEY_STEPS_COUNT)));
     }
 
-    // <number of steps>: successful
-    // -1 : unsuccessful
+
+    /**
+     * Creates new step data and saves it to the database.
+     * If today's step data already exists, then overwrites it by adding 1 to the current value.
+     * If it does not exist yet, inserts a new row to the database with the step count of 1.
+     * @return The number of current steps if the operation was successful, -1 otherwise.
+     */
     public int createStepData() {
         ContentValues values = new ContentValues();
 
@@ -88,19 +96,27 @@ public class StepDataDbManager {
         return successful ? newStepCount : -1;
     }
 
+    /**
+     * Updates a step data row in the database.
+     * @return a Boolean value indicating whether the operation was successful or not.
+     */
     private boolean updateStepData(ContentValues values, String todayDate) {
         int rowsAffected = db.update(DatabaseConstants.StepData.DATABASE_TABLE, values,
                 DatabaseConstants.StepData.KEY_DATE + "= '" + todayDate + "'", null);
         return rowsAffected == 1;
     }
 
+    /**
+     * Inserts a new step data row to the database.
+     * @return a Boolean value indicating whether the operation was successful or not
+     */
     private boolean insertStepData(ContentValues values) {
         long rowId = db.insert(DatabaseConstants.StepData.DATABASE_TABLE, null, values);
         return rowId != -1;
     }
 
     /**
-     * Make date in in YYYY/MM/DD format.
+     * Create a new date string in in YYYY/MM/DD format.
      */
     private String getTodayDate() {
         Calendar calendar = Calendar.getInstance();
